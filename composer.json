@@ -1,0 +1,27 @@
+{
+    "name": "ubc/ubc-llm-chat",
+    "description": "A WordPress plugin that creates a chat interface between the website and various large language models via their APIs.",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0-or-later",
+    "autoload": {
+        "psr-4": {
+            "UBC\\LLMChat\\": "includes/"
+        }
+    },
+    "authors": [
+        {
+            "name": "UBC",
+            "email": "example@ubc.ca"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">=8.0",
+        "theodo-group/llphant": "^0.9.7"
+    },
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
+    }
+}

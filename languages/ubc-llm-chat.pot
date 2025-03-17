@@ -1,0 +1,243 @@
+# Copyright (C) 2023 UBC
+# This file is distributed under the GPL v2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: UBC LLM Chat 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/ubc-llm-chat\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2023-01-01T12:00:00+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.7.1\n"
+"X-Domain: ubc-llm-chat\n"
+
+#. Plugin Name of the plugin
+msgid "UBC LLM Chat"
+msgstr ""
+
+#. Plugin URI of the plugin
+msgid "https://github.com/ubc/ubc-llm-chat"
+msgstr ""
+
+#. Description of the plugin
+msgid "A WordPress plugin that creates a chat interface between the website and various large language models via their APIs."
+msgstr ""
+
+#. Author of the plugin
+msgid "UBC"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://ubc.ca"
+msgstr ""
+
+#: includes/admin/class-ubc-llm-chat-admin.php:76
+msgid "UBC LLM Chat Settings"
+msgstr ""
+
+#: includes/admin/class-ubc-llm-chat-admin.php:77
+msgid "UBC LLM Chat"
+msgstr ""
+
+#: includes/admin/class-ubc-llm-chat-admin.php:126
+msgid "LLM Services"
+msgstr ""
+
+#: includes/admin/class-ubc-llm-chat-admin.php:134
+msgid "Enable OpenAI (ChatGPT)"
+msgstr ""
+
+#: includes/admin/class-ubc-llm-chat-admin.php:142
+msgid "OpenAI API Key"
+msgstr ""
+
+#: includes/admin/class-ubc-llm-chat-admin.php:150
+msgid "Available OpenAI Models"
+msgstr ""
+
+#: includes/admin/class-ubc-llm-chat-admin.php:158
+msgid "Enable Ollama"
+msgstr ""
+
+#: includes/admin/class-ubc-llm-chat-admin.php:166
+msgid "Ollama URL"
+msgstr ""
+
+#: includes/admin/class-ubc-llm-chat-admin.php:174
+msgid "Available Ollama Models"
+msgstr ""
+
+#: includes/admin/class-ubc-llm-chat-admin.php:182
+msgid "Global Settings"
+msgstr ""
+
+#: includes/admin/class-ubc-llm-chat-admin.php:190
+msgid "Global Rate Limit (seconds)"
+msgstr ""
+
+#: includes/admin/class-ubc-llm-chat-admin.php:198
+msgid "Global Maximum Conversations per User"
+msgstr ""
+
+#: includes/admin/class-ubc-llm-chat-admin.php:206
+msgid "Global Maximum Messages per Conversation"
+msgstr ""
+
+#: includes/admin/class-ubc-llm-chat-admin.php:214
+msgid "Connection Timeout (seconds)"
+msgstr ""
+
+#: includes/admin/class-ubc-llm-chat-admin.php:222
+msgid "Minimum User Role"
+msgstr ""
+
+#: includes/admin/class-ubc-llm-chat-admin.php:230
+msgid "Debug Mode"
+msgstr ""
+
+#: includes/admin/class-ubc-llm-chat-admin.php:246
+msgid "Configure the LLM services you want to make available on your site."
+msgstr ""
+
+#: includes/admin/class-ubc-llm-chat-admin.php:255
+msgid "Configure global settings for the UBC LLM Chat plugin."
+msgstr ""
+
+#: includes/admin/class-ubc-llm-chat-admin.php:307
+msgid "Enable OpenAI (ChatGPT) integration"
+msgstr ""
+
+#: includes/admin/class-ubc-llm-chat-admin.php:309
+msgid "Check this box to enable OpenAI (ChatGPT) integration."
+msgstr ""
+
+#: includes/admin/class-ubc-llm-chat-admin.php:322
+msgid "Enter your OpenAI API key. This is required for OpenAI integration to work."
+msgstr ""
+
+#: includes/admin/class-ubc-llm-chat-admin.php:326
+msgid "Test Connection"
+msgstr ""
+
+#: includes/admin/class-ubc-llm-chat-admin.php:343
+msgid "Fetch Available Models"
+msgstr ""
+
+#: includes/admin/class-ubc-llm-chat-admin.php:348
+msgid "Available Models:"
+msgstr ""
+
+#: includes/admin/class-ubc-llm-chat-admin.php:362
+msgid "Click the button to fetch available models from OpenAI. You must have a valid API key."
+msgstr ""
+
+#: includes/admin/class-ubc-llm-chat-admin.php:375
+msgid "Enable Ollama integration"
+msgstr ""
+
+#: includes/admin/class-ubc-llm-chat-admin.php:377
+msgid "Check this box to enable Ollama integration."
+msgstr ""
+
+#: includes/admin/class-ubc-llm-chat-admin.php:390
+msgid "Enter the URL for your Ollama server. Default is http://localhost:11434/api/"
+msgstr ""
+
+#: includes/admin/class-ubc-llm-chat-admin.php:430
+msgid "Click the button to fetch available models from your Ollama server."
+msgstr ""
+
+#: includes/admin/class-ubc-llm-chat-admin.php:443
+msgid "Enter the number of seconds between API requests. Set to 0 to disable rate limiting."
+msgstr ""
+
+#: includes/admin/class-ubc-llm-chat-admin.php:456
+msgid "Enter the maximum number of conversations a user can have."
+msgstr ""
+
+#: includes/admin/class-ubc-llm-chat-admin.php:469
+msgid "Enter the maximum number of messages per conversation."
+msgstr ""
+
+#: includes/admin/class-ubc-llm-chat-admin.php:482
+msgid "Enter the connection timeout in seconds."
+msgstr ""
+
+#: includes/admin/class-ubc-llm-chat-admin.php:495
+msgid "Subscriber"
+msgstr ""
+
+#: includes/admin/class-ubc-llm-chat-admin.php:496
+msgid "Contributor"
+msgstr ""
+
+#: includes/admin/class-ubc-llm-chat-admin.php:497
+msgid "Author"
+msgstr ""
+
+#: includes/admin/class-ubc-llm-chat-admin.php:498
+msgid "Editor"
+msgstr ""
+
+#: includes/admin/class-ubc-llm-chat-admin.php:499
+msgid "Administrator"
+msgstr ""
+
+#: includes/admin/class-ubc-llm-chat-admin.php:506
+msgid "Select the minimum user role required to access the chat interface."
+msgstr ""
+
+#: includes/admin/class-ubc-llm-chat-admin.php:519
+msgid "Enable debug mode"
+msgstr ""
+
+#: includes/admin/class-ubc-llm-chat-admin.php:521
+msgid "Check this box to enable debug mode. This will output debug information to the wp-content/debug.log file."
+msgstr ""
+
+#: includes/admin/class-ubc-llm-chat-admin.php:536
+msgid "Security check failed."
+msgstr ""
+
+#: includes/admin/class-ubc-llm-chat-admin.php:541
+msgid "You do not have permission to perform this action."
+msgstr ""
+
+#: includes/admin/class-ubc-llm-chat-admin.php:548
+msgid "API key is required."
+msgstr ""
+
+#: includes/admin/class-ubc-llm-chat-admin.php:560
+msgid "No models found."
+msgstr ""
+
+#: includes/admin/class-ubc-llm-chat-admin.php:594
+msgid "URL is required."
+msgstr ""
+
+#: includes/admin/partials/ubc-llm-chat-admin-usage-tracking.php:33
+msgid "Usage Statistics"
+msgstr ""
+
+#: includes/admin/partials/ubc-llm-chat-admin-usage-tracking.php:38
+msgid "Metric"
+msgstr ""
+
+#: includes/admin/partials/ubc-llm-chat-admin-usage-tracking.php:39
+msgid "Value"
+msgstr ""
+
+#: includes/admin/partials/ubc-llm-chat-admin-usage-tracking.php:44
+msgid "Total Users with Conversations"
+msgstr ""
+
+#: includes/admin/partials/ubc-llm-chat-admin-usage-tracking.php:48
+msgid "Total Conversations"
+msgstr ""
+
+#: includes/admin/partials/ubc-llm-chat-admin-usage-tracking.php:52
+msgid "Total Messages"
+msgstr ""

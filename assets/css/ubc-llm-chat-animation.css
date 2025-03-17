@@ -1,0 +1,104 @@
+/**
+ * Animation styles for UBC LLM Chat plugin.
+ *
+ * @package UBC\LLMChat
+ */
+
+/* Animated sentence for fade-in effect */
+.ubc-llm-chat-animated-sentence {
+    animation: ubc-llm-chat-fade-in 0.3s ease-in-out;
+}
+
+/* Fade-in animation */
+@keyframes ubc-llm-chat-fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Animation controls */
+.ubc-llm-chat-animation-controls {
+    margin: 10px 0;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+}
+
+.ubc-llm-chat-animation-controls h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.ubc-llm-chat-animation-controls-group {
+    margin-bottom: 10px;
+}
+
+.ubc-llm-chat-animation-controls-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+    font-size: 13px;
+}
+
+.ubc-llm-chat-animation-mode-selector {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.ubc-llm-chat-animation-mode-button {
+    padding: 5px 10px;
+    background-color: #f0f0f1;
+    border: 1px solid #c3c4c7;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.2s ease;
+}
+
+.ubc-llm-chat-animation-mode-button:hover {
+    background-color: #e0e0e1;
+}
+
+.ubc-llm-chat-animation-mode-button.active {
+    background-color: #2271b1;
+    color: #fff;
+    border-color: #135e96;
+}
+
+.ubc-llm-chat-animation-speed-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.ubc-llm-chat-animation-speed-slider {
+    flex-grow: 1;
+}
+
+.ubc-llm-chat-animation-speed-value {
+    min-width: 40px;
+    text-align: right;
+    font-size: 12px;
+}
+
+.ubc-llm-chat-animation-toggle {
+    margin-top: 10px;
+}
+
+.ubc-llm-chat-animation-toggle label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+}
+
+.ubc-llm-chat-animation-toggle input[type="checkbox"] {
+    margin: 0;
+}

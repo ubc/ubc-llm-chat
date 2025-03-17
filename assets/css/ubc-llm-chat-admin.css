@@ -1,0 +1,138 @@
+/**
+ * Admin styles for UBC LLM Chat plugin.
+ */
+
+/* Settings page */
+.models-container {
+    margin-top: 15px;
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    padding: 10px;
+    background-color: #f9f9f9;
+}
+
+.models-container ul {
+    margin: 0;
+    padding: 0;
+}
+
+.models-container li {
+    margin-bottom: 5px;
+    list-style: none;
+}
+
+.connection-result,
+.models-result {
+    display: inline-block;
+    margin-left: 10px;
+    padding: 5px;
+    font-weight: bold;
+}
+
+.connection-result.success,
+.models-result.success {
+    color: green;
+}
+
+.connection-result.error,
+.models-result.error {
+    color: red;
+}
+
+/* Usage tracking */
+.ubc-llm-chat-usage-stats {
+    margin-top: 20px;
+}
+
+.ubc-llm-chat-usage-stats table {
+    margin-top: 10px;
+}
+
+/* Admin settings styles */
+.ubc-llm-chat-admin .form-table th {
+    width: 200px;
+}
+
+.ubc-llm-chat-admin .form-table td {
+    vertical-align: top;
+}
+
+.ubc-llm-chat-admin .section-header {
+    margin-top: 30px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+.ubc-llm-chat-admin .section-description {
+    margin-bottom: 20px;
+    color: #666;
+}
+
+.ubc-llm-chat-admin .api-key-container {
+    position: relative;
+}
+
+.ubc-llm-chat-admin .api-key-field {
+    padding-right: 40px;
+    width: 400px;
+}
+
+.ubc-llm-chat-admin .toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 5px;
+    cursor: pointer;
+    color: #777;
+}
+
+.ubc-llm-chat-admin .submit {
+    margin-top: 30px;
+}
+
+/* Block editor styles */
+.ubc-llm-chat-block-editor {
+    padding: 20px;
+    background-color: #f8f9fa;
+    border: 1px solid #e2e4e7;
+    border-radius: 4px;
+}
+
+.ubc-llm-chat-block-preview {
+    background-color: white;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.ubc-llm-chat-block-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: #1e1e1e;
+}
+
+.ubc-llm-chat-block-description {
+    color: #757575;
+    font-size: 13px;
+    margin-bottom: 10px;
+}
+
+.ubc-llm-chat-block-settings {
+    background-color: #f7f7f7;
+    padding: 10px;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+.ubc-llm-chat-block-settings p {
+    margin: 5px 0;
+}
+
+.ubc-llm-chat-block-settings strong {
+    display: inline-block;
+    width: 120px;
+}
