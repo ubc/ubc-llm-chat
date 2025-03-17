@@ -517,30 +517,90 @@ class UBC_LLM_Chat_Message_Controller {
 
 		// Create a filtered version of the settings to return to the client.
 		$client_settings = array(
-			'available_llm_services'   => array(),
+			'services'                 => array(),
 			'global_rate_limit'        => isset( $settings['global_rate_limit'] ) ? (int) $settings['global_rate_limit'] : 5,
 			'global_max_conversations' => isset( $settings['global_max_conversations'] ) ? (int) $settings['global_max_conversations'] : 10,
 			'global_max_messages'      => isset( $settings['global_max_messages'] ) ? (int) $settings['global_max_messages'] : 20,
+			'minimum_user_role'        => isset( $settings['minimum_user_role'] ) ? $settings['minimum_user_role'] : 'subscriber',
 		);
 
-		// Add OpenAI service if enabled.
-		if ( isset( $settings['openai_enabled'] ) && $settings['openai_enabled'] ) {
-			$client_settings['available_llm_services']['openai'] = array(
-				'name'   => esc_html__( 'OpenAI (ChatGPT)', 'ubc-llm-chat' ),
-				'models' => isset( $settings['openai_models'] ) ? $settings['openai_models'] : array(),
+		// Process OpenAI models - could be stored as indexed array or associative array.
+		$openai_models = array();
+		if ( isset( $settings['openai_models'] ) ) {
+			// Check if it's an array.
+			if ( is_array( $settings['openai_models'] ) ) {
+				// If associative array with checkboxes (key => value pairs where value is the model name).
+				if ( ! empty( $settings['openai_models'] ) && ! isset( $settings['openai_models'][0] ) ) {
+					foreach ( $settings['openai_models'] as $model_key => $model_value ) {
+						if ( $model_value ) { // If checkbox is checked.
+							$openai_models[] = $model_key;
+						}
+					}
+				} else {
+					// Regular indexed array.
+					$openai_models = $settings['openai_models'];
+				}
+			}
+		}
+
+		// Process Ollama models - stored as associative array with checkboxes.
+		$ollama_models = array();
+		if ( isset( $settings['ollama_models'] ) && is_array( $settings['ollama_models'] ) ) {
+			// If associative array with checkboxes (key => value pairs where key is the model name).
+			if ( ! empty( $settings['ollama_models'] ) && ! isset( $settings['ollama_models'][0] ) ) {
+				foreach ( $settings['ollama_models'] as $model_key => $model_value ) {
+					if ( $model_value ) { // If checkbox is checked.
+						$ollama_models[] = $model_key;
+					}
+				}
+			} else {
+				// Regular indexed array (unlikely but handle it).
+				$ollama_models = $settings['ollama_models'];
+			}
+		}
+
+		// Log found models for debugging.
+		\UBC\LLMChat\UBC_LLM_Chat_Debug::info( 'Settings API - OpenAI Models: ' . wp_json_encode( $openai_models ) );
+		\UBC\LLMChat\UBC_LLM_Chat_Debug::info( 'Settings API - Ollama Models: ' . wp_json_encode( $ollama_models ) );
+
+		// Add OpenAI service.
+		$client_settings['services']['openai'] = array(
+			'name'    => esc_html__( 'OpenAI (ChatGPT)', 'ubc-llm-chat' ),
+			'enabled' => isset( $settings['openai_enabled'] ) && $settings['openai_enabled'],
+			'models'  => $openai_models,
+		);
+
+		// Add Ollama service.
+		$client_settings['services']['ollama'] = array(
+			'name'    => esc_html__( 'Ollama', 'ubc-llm-chat' ),
+			'enabled' => isset( $settings['ollama_enabled'] ) && $settings['ollama_enabled'],
+			'models'  => $ollama_models,
+		);
+
+		// Add available_llm_services for backward compatibility.
+		$available_llm_services = array();
+
+		if ( $client_settings['services']['openai']['enabled'] ) {
+			$available_llm_services['openai'] = array(
+				'name'   => $client_settings['services']['openai']['name'],
+				'models' => $client_settings['services']['openai']['models'],
 			);
 		}
 
-		// Add Ollama service if enabled.
-		if ( isset( $settings['ollama_enabled'] ) && $settings['ollama_enabled'] ) {
-			$client_settings['available_llm_services']['ollama'] = array(
-				'name'   => esc_html__( 'Ollama', 'ubc-llm-chat' ),
-				'models' => isset( $settings['ollama_models'] ) ? $settings['ollama_models'] : array(),
+		if ( $client_settings['services']['ollama']['enabled'] ) {
+			$available_llm_services['ollama'] = array(
+				'name'   => $client_settings['services']['ollama']['name'],
+				'models' => $client_settings['services']['ollama']['models'],
 			);
 		}
+
+		$client_settings['available_llm_services'] = $available_llm_services;
 
 		// Apply filter to allow plugins to modify the available LLM services.
 		$client_settings['available_llm_services'] = apply_filters( 'ubc_llm_chat_available_llm_services', $client_settings['available_llm_services'] );
+
+		// Apply filter to allow plugins to modify all client settings.
+		$client_settings = apply_filters( 'ubc_llm_chat_client_settings', $client_settings );
 
 		// Return the settings.
 		return new WP_REST_Response( $client_settings, 200 );

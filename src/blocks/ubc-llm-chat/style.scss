@@ -1,0 +1,87 @@
+/**
+ * UBC LLM Chat Block styles
+ *
+ * Styles for both editor and frontend.
+ */
+
+.ubc-llm-chat-block-editor {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    max-width: 100%;
+
+    .ubc-llm-chat-block-loading,
+    .ubc-llm-chat-block-error {
+        text-align: center;
+        padding: 20px;
+
+        .components-spinner {
+            margin: 0 auto 10px;
+            display: block;
+        }
+
+        p {
+            margin: 0;
+        }
+    }
+
+    .ubc-llm-chat-block-error {
+        color: #cc1818;
+        border: 1px solid #cc1818;
+        background-color: #f8d7da;
+    }
+
+    .ubc-llm-chat-block-preview {
+        .ubc-llm-chat-block-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #1e1e1e;
+        }
+
+        .ubc-llm-chat-block-description {
+            margin-bottom: 15px;
+            color: #555;
+        }
+
+        .ubc-llm-chat-block-settings {
+            background-color: #fff;
+            border: 1px solid #e2e4e7;
+            border-radius: 4px;
+            padding: 10px;
+
+            p {
+                margin: 5px 0;
+                font-size: 13px;
+            }
+        }
+    }
+}
+
+/* Inspector control panel styles */
+.ubc-llm-chat-loading {
+    text-align: center;
+    padding: 10px 0;
+
+    .components-spinner {
+        margin: 0 auto 10px;
+        display: block;
+    }
+
+    p {
+        margin: 0;
+    }
+}
+
+.ubc-llm-chat-error {
+    color: #cc1818;
+    padding: 10px;
+    border: 1px solid #cc1818;
+    background-color: #f8d7da;
+    border-radius: 4px;
+
+    p {
+        margin: 0;
+    }
+}

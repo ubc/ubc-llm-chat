@@ -1,0 +1,22 @@
+{
+  "name": "ubc-llm-chat",
+  "version": "1.0.0",
+  "description": "A WordPress plugin that creates a chat interface between the website and various large language models via their APIs.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "build": "wp-scripts build",
+    "start": "wp-scripts start",
+    "format": "wp-scripts format",
+    "lint:js": "wp-scripts lint-js",
+    "dev": "wp-scripts start --webpack-src-dir=src --output-path=build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@wordpress/scripts": "^26.19.0"
+  }
+}

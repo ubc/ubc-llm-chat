@@ -3,8 +3,31 @@
 composer.lock
 
 # Node.js
-/node_modules/
+node_modules/
+npm-debug.log
+yarn-error.log
+yarn-debug.log
 package-lock.json
+
+# Build files
+#build/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Editor files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
 
 # IDE and editor files
 .idea/

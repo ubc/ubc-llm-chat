@@ -28,18 +28,27 @@ class UBC_LLM_Chat_Block {
 	public function register() {
 		// Register block script.
 		wp_register_script(
-			'ubc-llm-chat-block',
-			UBC_LLM_CHAT_URL . 'assets/js/ubc-llm-chat-block.js',
-			array( 'wp-blocks', 'wp-element', 'wp-editor', 'wp-components' ),
+			'ubc-llm-chat-block-editor',
+			UBC_LLM_CHAT_URL . 'build/index.js',
+			array( 'wp-blocks', 'wp-element', 'wp-editor', 'wp-components', 'wp-i18n', 'wp-block-editor' ),
 			UBC_LLM_CHAT_VERSION,
 			true
+		);
+
+		// Register block styles.
+		wp_register_style(
+			'ubc-llm-chat-block-editor',
+			UBC_LLM_CHAT_URL . 'build/index.css',
+			array( 'wp-edit-blocks' ),
+			UBC_LLM_CHAT_VERSION
 		);
 
 		// Register block.
 		register_block_type(
 			'ubc-llm-chat/chat',
 			array(
-				'editor_script'   => 'ubc-llm-chat-block',
+				'editor_script'   => 'ubc-llm-chat-block-editor',
+				'editor_style'    => 'ubc-llm-chat-block-editor',
 				'render_callback' => array( $this, 'render' ),
 				'attributes'      => array(
 					'llmservice'        => array(

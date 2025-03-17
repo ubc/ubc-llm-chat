@@ -1,0 +1,11 @@
+/**
+ * UBC LLM Chat Block editor styles
+ *
+ * Styles that only apply in the editor.
+ */
+
+.wp-block-ubc-llm-chat-chat {
+    &.is-selected, &.has-child-selected {
+        border: 2px solid #0073aa;
+    }
+}
