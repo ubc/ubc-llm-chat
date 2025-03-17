@@ -277,18 +277,78 @@ registerBlockType('ubc-llm-chat/chat', {
                         </div>
                     ) : (
                         <div className="ubc-llm-chat-block-preview">
-                            <div className="ubc-llm-chat-block-title">
-                                {__('UBC LLM Chat', 'ubc-llm-chat')}
+                            <div className="ubc-llm-chat-block-header">
+                                <h3 className="ubc-llm-chat-block-title">
+                                    {__('UBC LLM Chat', 'ubc-llm-chat')}
+                                    {attributes.debug_mode && <span className="ubc-llm-chat-debug-badge">{__('Debug Mode', 'ubc-llm-chat')}</span>}
+                                </h3>
+                                <div className="ubc-llm-chat-block-subtitle">
+                                    <span className="ubc-llm-chat-service">
+                                        {attributes.llmservice
+                                            ? attributes.llmservice.charAt(0).toUpperCase() + attributes.llmservice.slice(1)
+                                            : __('Default Service', 'ubc-llm-chat')}
+                                    </span>
+                                    {attributes.llm && <span className="ubc-llm-chat-model"> / {attributes.llm}</span>}
+                                </div>
                             </div>
-                            <div className="ubc-llm-chat-block-description">
-                                {__('This block will display a chat interface on the front end.', 'ubc-llm-chat')}
+
+                            <div className="ubc-llm-chat-preview-container">
+                                {/* Conversation list */}
+                                <div className="ubc-llm-chat-preview-sidebar">
+                                    <div className="ubc-llm-chat-preview-new-chat">
+                                        <span className="ubc-llm-chat-preview-button">+ {__('New Chat', 'ubc-llm-chat')}</span>
+                                    </div>
+                                    <div className="ubc-llm-chat-preview-conversations">
+                                        <div className="ubc-llm-chat-preview-conversation ubc-llm-chat-preview-active">
+                                            <span className="ubc-llm-chat-preview-conversation-title">{__('AI Background Research', 'ubc-llm-chat')}</span>
+                                            <span className="ubc-llm-chat-preview-conversation-time">{__('Today', 'ubc-llm-chat')}</span>
+                                        </div>
+                                        <div className="ubc-llm-chat-preview-conversation">
+                                            <span className="ubc-llm-chat-preview-conversation-title">{__('Course Planning', 'ubc-llm-chat')}</span>
+                                            <span className="ubc-llm-chat-preview-conversation-time">{__('Yesterday', 'ubc-llm-chat')}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Main chat area */}
+                                <div className="ubc-llm-chat-preview-main">
+                                    <div className="ubc-llm-chat-preview-messages">
+                                        <div className="ubc-llm-chat-preview-message ubc-llm-chat-preview-user-message">
+                                            <div className="ubc-llm-chat-preview-message-content">
+                                                <p>{__('Can you tell me about recent advancements in AI research?', 'ubc-llm-chat')}</p>
+                                            </div>
+                                        </div>
+                                        <div className="ubc-llm-chat-preview-message ubc-llm-chat-preview-ai-message">
+                                            <div className="ubc-llm-chat-preview-message-content">
+                                                <p>{__('Recent AI advancements include multimodal models like GPT-4o that can process text, images, and audio simultaneously...', 'ubc-llm-chat')}</p>
+                                            </div>
+                                        </div>
+                                        <div className="ubc-llm-chat-preview-message ubc-llm-chat-preview-user-message">
+                                            <div className="ubc-llm-chat-preview-message-content">
+                                                <p>{__('How might these be applied in education?', 'ubc-llm-chat')}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="ubc-llm-chat-preview-input-area">
+                                        <div className="ubc-llm-chat-preview-input">
+                                            <div className="ubc-llm-chat-preview-textarea">{__('Type your message...', 'ubc-llm-chat')}</div>
+                                            <div className="ubc-llm-chat-preview-send-button">→</div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div className="ubc-llm-chat-block-settings">
-                                <p><strong>{__('Service:', 'ubc-llm-chat')}</strong> {attributes.llmservice || __('Default', 'ubc-llm-chat')}</p>
-                                <p><strong>{__('Model:', 'ubc-llm-chat')}</strong> {attributes.llm || __('Default', 'ubc-llm-chat')}</p>
-                                <p><strong>{__('Temperature:', 'ubc-llm-chat')}</strong> {attributes.temperature}</p>
-                                <p><strong>{__('Max Messages:', 'ubc-llm-chat')}</strong> {attributes.maxmessages}</p>
-                                <p><strong>{__('Max Conversations:', 'ubc-llm-chat')}</strong> {attributes.maxconversations}</p>
+
+                            <div className="ubc-llm-chat-block-footer">
+                                <div className="ubc-llm-chat-block-settings-badge">
+                                    <span><strong>{__('Max Messages:', 'ubc-llm-chat')}</strong> {attributes.maxmessages}</span>
+                                    <span><strong>{__('Max Conversations:', 'ubc-llm-chat')}</strong> {attributes.maxconversations}</span>
+                                    <span><strong>{__('Temperature:', 'ubc-llm-chat')}</strong> {attributes.temperature}</span>
+                                </div>
+                                {attributes.minimum_user_role && (
+                                    <div className="ubc-llm-chat-block-role-badge">
+                                        {__('Minimum Role:', 'ubc-llm-chat')} {attributes.minimum_user_role}
+                                    </div>
+                                )}
                             </div>
                         </div>
                     )}
