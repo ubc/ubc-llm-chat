@@ -25,11 +25,20 @@ class UBC_LLM_Chat_Admin {
 	 * @since    1.0.0
 	 */
 	public function __construct() {
-		// Register AJAX handlers.
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_styles' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+		add_action( 'admin_menu', array( $this, 'add_settings_page' ) );
+
+		add_action( 'admin_init', array( $this, 'register_settings' ) );
+
+		// AJAX handlers.
 		add_action( 'wp_ajax_ubc_llm_chat_test_openai_connection', array( $this, 'test_openai_connection' ) );
 		add_action( 'wp_ajax_ubc_llm_chat_test_ollama_connection', array( $this, 'test_ollama_connection' ) );
 		add_action( 'wp_ajax_ubc_llm_chat_fetch_openai_models', array( $this, 'fetch_openai_models' ) );
 		add_action( 'wp_ajax_ubc_llm_chat_fetch_ollama_models', array( $this, 'fetch_ollama_models' ) );
+
+		// Add hook for storing all available models.
+		add_action( 'ubc_llm_chat_models_fetched', array( $this, 'store_available_models' ), 10, 2 );
 
 		// Add help tab.
 		add_action( 'admin_head', array( $this, 'add_help_tab' ) );
@@ -420,6 +429,11 @@ class UBC_LLM_Chat_Admin {
 			$sanitized_input['openai_models'] = array();
 		}
 
+		// Preserve available models.
+		if ( isset( $input['openai_available_models'] ) ) {
+			$sanitized_input['openai_available_models'] = $input['openai_available_models'];
+		}
+
 		if ( isset( $input['openai_temperature'] ) ) {
 			$sanitized_input['openai_temperature'] = floatval( $input['openai_temperature'] );
 			// Ensure temperature is between 0 and 1.
@@ -442,6 +456,11 @@ class UBC_LLM_Chat_Admin {
 		} elseif ( isset( $input['ollama_enabled'] ) && $input['ollama_enabled'] ) {
 			// Only reset models if we're enabling Ollama and no models were provided.
 			$sanitized_input['ollama_models'] = array();
+		}
+
+		// Preserve available models.
+		if ( isset( $input['ollama_available_models'] ) ) {
+			$sanitized_input['ollama_available_models'] = $input['ollama_available_models'];
 		}
 
 		if ( isset( $input['ollama_temperature'] ) ) {
@@ -547,24 +566,28 @@ class UBC_LLM_Chat_Admin {
 	 * @since    1.0.0
 	 */
 	public function openai_fetch_models_callback() {
-		$settings = get_option( 'ubc_llm_chat_settings' );
-		$disabled = isset( $settings['openai_enabled'] ) && $settings['openai_enabled'] ? '' : 'disabled';
-		$models   = isset( $settings['openai_models'] ) ? $settings['openai_models'] : array();
+		$settings         = get_option( 'ubc_llm_chat_settings' );
+		$disabled         = isset( $settings['openai_enabled'] ) && $settings['openai_enabled'] ? '' : 'disabled';
+		$models           = isset( $settings['openai_models'] ) ? $settings['openai_models'] : array();
+		$available_models = isset( $settings['openai_available_models'] ) ? $settings['openai_available_models'] : array();
 
 		echo '<button type="button" id="fetch_openai_models" class="button button-secondary" ' . esc_attr( $disabled ) . '>' . esc_html__( 'Fetch Available Models', 'ubc-llm-chat' ) . '</button>';
 		echo '<span id="openai_models_result" class="models-result"></span>';
 
 		echo '<div id="openai_models_container" class="models-container">';
-		if ( ! empty( $models ) ) {
+		if ( ! empty( $available_models ) ) {
 			echo '<p>' . esc_html__( 'Available Models:', 'ubc-llm-chat' ) . '</p>';
 			echo '<ul>';
-			foreach ( $models as $model_id => $model_name ) {
+			foreach ( $available_models as $model_id => $model_name ) {
+				$checked = isset( $models[ $model_id ] ) ? 'checked' : '';
 				echo '<li>';
 				echo '<label>';
-				echo '<input type="checkbox" name="ubc_llm_chat_settings[openai_models][' . esc_attr( $model_id ) . ']" value="' . esc_attr( $model_name ) . '" checked />';
+				echo '<input type="checkbox" name="ubc_llm_chat_settings[openai_models][' . esc_attr( $model_id ) . ']" value="' . esc_attr( $model_name ) . '" ' . esc_attr( $checked ) . ' />';
 				echo esc_html( $model_name );
 				echo '</label>';
 				echo '</li>';
+				// Add a hidden field to preserve available models data on form submission.
+				echo '<input type="hidden" name="ubc_llm_chat_settings[openai_available_models][' . esc_attr( $model_id ) . ']" value="' . esc_attr( $model_name ) . '" />';
 			}
 			echo '</ul>';
 		}
@@ -642,24 +665,28 @@ class UBC_LLM_Chat_Admin {
 	 * @since    1.0.0
 	 */
 	public function ollama_fetch_models_callback() {
-		$settings = get_option( 'ubc_llm_chat_settings' );
-		$disabled = isset( $settings['ollama_enabled'] ) && $settings['ollama_enabled'] ? '' : 'disabled';
-		$models   = isset( $settings['ollama_models'] ) ? $settings['ollama_models'] : array();
+		$settings         = get_option( 'ubc_llm_chat_settings' );
+		$disabled         = isset( $settings['ollama_enabled'] ) && $settings['ollama_enabled'] ? '' : 'disabled';
+		$models           = isset( $settings['ollama_models'] ) ? $settings['ollama_models'] : array();
+		$available_models = isset( $settings['ollama_available_models'] ) ? $settings['ollama_available_models'] : array();
 
 		echo '<button type="button" id="fetch_ollama_models" class="button button-secondary" ' . esc_attr( $disabled ) . '>' . esc_html__( 'Fetch Available Models', 'ubc-llm-chat' ) . '</button>';
 		echo '<span id="ollama_models_result" class="models-result"></span>';
 
 		echo '<div id="ollama_models_container" class="models-container">';
-		if ( ! empty( $models ) ) {
+		if ( ! empty( $available_models ) ) {
 			echo '<p>' . esc_html__( 'Available Models:', 'ubc-llm-chat' ) . '</p>';
 			echo '<ul>';
-			foreach ( $models as $model_id => $model_name ) {
+			foreach ( $available_models as $model_id => $model_name ) {
+				$checked = isset( $models[ $model_id ] ) ? 'checked' : '';
 				echo '<li>';
 				echo '<label>';
-				echo '<input type="checkbox" name="ubc_llm_chat_settings[ollama_models][' . esc_attr( $model_id ) . ']" value="' . esc_attr( $model_name ) . '" checked />';
+				echo '<input type="checkbox" name="ubc_llm_chat_settings[ollama_models][' . esc_attr( $model_id ) . ']" value="' . esc_attr( $model_name ) . '" ' . esc_attr( $checked ) . ' />';
 				echo esc_html( $model_name );
 				echo '</label>';
 				echo '</li>';
+				// Add a hidden field to preserve available models data on form submission.
+				echo '<input type="hidden" name="ubc_llm_chat_settings[ollama_available_models][' . esc_attr( $model_id ) . ']" value="' . esc_attr( $model_name ) . '" />';
 			}
 			echo '</ul>';
 		}
@@ -1082,5 +1109,36 @@ class UBC_LLM_Chat_Admin {
 		}
 
 		return isset( $response_data['data'] ) ? $response_data['data'] : array();
+	}
+
+	/**
+	 * Store all available models when they are fetched.
+	 *
+	 * @since    1.0.0
+	 * @param    string $service    The service name.
+	 * @param    array  $models     The fetched models.
+	 */
+	public function store_available_models( $service, $models ) {
+		$settings = get_option( 'ubc_llm_chat_settings', array() );
+
+		// Store all available models.
+		if ( 'openai' === $service ) {
+			// Format OpenAI models.
+			$all_models = array();
+			foreach ( $models as $model ) {
+				$all_models[ $model['id'] ] = $model['id'];
+			}
+			$settings['openai_available_models'] = $all_models;
+		} elseif ( 'ollama' === $service ) {
+			// Format Ollama models.
+			$all_models = array();
+			foreach ( $models as $model ) {
+				$all_models[ $model['name'] ] = $model['name'];
+			}
+			$settings['ollama_available_models'] = $all_models;
+		}
+
+		// Update the settings.
+		update_option( 'ubc_llm_chat_settings', $settings );
 	}
 }

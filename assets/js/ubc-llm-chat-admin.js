@@ -147,21 +147,40 @@ document.addEventListener('DOMContentLoaded', function() {
                     resultSpan.textContent = 'Models fetched successfully!';
                     resultSpan.className = 'models-result success';
 
-                    // Update models container
-                    modelsContainer.innerHTML = '<p>Available Models:</p><ul>';
+                    // Get current selected models
+                    const currentModels = {};
+                    const existingCheckboxes = modelsContainer.querySelectorAll('input[type="checkbox"]');
+
+                    existingCheckboxes.forEach(checkbox => {
+                        // Extract model ID from the name attribute
+                        const match = checkbox.name.match(/\[openai_models\]\[([^\]]+)\]/);
+                        if (match && match[1]) {
+                            // Store checked state by model ID
+                            currentModels[match[1]] = checkbox.checked;
+                        }
+                    });
+
+                    // Create new HTML with proper structure
+                    let html = '<p>' + (window.ubc_llm_chat_admin && window.ubc_llm_chat_admin.i18n ?
+                                        window.ubc_llm_chat_admin.i18n.available_models :
+                                        'Available Models:') + '</p><ul>';
 
                     data.data.forEach(model => {
-                        modelsContainer.innerHTML += `
+                        // Check if this model was previously selected, default to checked if it's a new model
+                        const isChecked = currentModels.hasOwnProperty(model.id) ? currentModels[model.id] : true;
+
+                        html += `
                             <li>
                                 <label>
-                                    <input type="checkbox" name="ubc_llm_chat_settings[openai_models][${model.id}]" value="${model.id}" checked />
+                                    <input type="checkbox" name="ubc_llm_chat_settings[openai_models][${model.id}]" value="${model.id}" ${isChecked ? 'checked' : ''} />
                                     ${model.id}
                                 </label>
                             </li>
                         `;
                     });
 
-                    modelsContainer.innerHTML += '</ul>';
+                    html += '</ul>';
+                    modelsContainer.innerHTML = html;
                 } else {
                     resultSpan.textContent = 'Failed to fetch models: ' + data.data;
                     resultSpan.className = 'models-result error';
@@ -204,21 +223,40 @@ document.addEventListener('DOMContentLoaded', function() {
                     resultSpan.textContent = 'Models fetched successfully!';
                     resultSpan.className = 'models-result success';
 
-                    // Update models container
-                    modelsContainer.innerHTML = '<p>Available Models:</p><ul>';
+                    // Get current selected models
+                    const currentModels = {};
+                    const existingCheckboxes = modelsContainer.querySelectorAll('input[type="checkbox"]');
+
+                    existingCheckboxes.forEach(checkbox => {
+                        // Extract model ID from the name attribute
+                        const match = checkbox.name.match(/\[ollama_models\]\[([^\]]+)\]/);
+                        if (match && match[1]) {
+                            // Store checked state by model ID
+                            currentModels[match[1]] = checkbox.checked;
+                        }
+                    });
+
+                    // Create new HTML with proper structure
+                    let html = '<p>' + (window.ubc_llm_chat_admin && window.ubc_llm_chat_admin.i18n ?
+                                        window.ubc_llm_chat_admin.i18n.available_models :
+                                        'Available Models:') + '</p><ul>';
 
                     data.data.forEach(model => {
-                        modelsContainer.innerHTML += `
+                        // Check if this model was previously selected, default to checked if it's a new model
+                        const isChecked = currentModels.hasOwnProperty(model.name) ? currentModels[model.name] : true;
+
+                        html += `
                             <li>
                                 <label>
-                                    <input type="checkbox" name="ubc_llm_chat_settings[ollama_models][${model.name}]" value="${model.name}" checked />
+                                    <input type="checkbox" name="ubc_llm_chat_settings[ollama_models][${model.name}]" value="${model.name}" ${isChecked ? 'checked' : ''} />
                                     ${model.name}
                                 </label>
                             </li>
                         `;
                     });
 
-                    modelsContainer.innerHTML += '</ul>';
+                    html += '</ul>';
+                    modelsContainer.innerHTML = html;
                 } else {
                     resultSpan.textContent = 'Failed to fetch models: ' + data.data;
                     resultSpan.className = 'models-result error';

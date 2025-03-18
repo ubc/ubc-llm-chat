@@ -524,39 +524,18 @@ class UBC_LLM_Chat_Message_Controller {
 			'minimum_user_role'        => isset( $settings['minimum_user_role'] ) ? $settings['minimum_user_role'] : 'subscriber',
 		);
 
-		// Process OpenAI models - could be stored as indexed array or associative array.
+		// Process OpenAI models - return only the checked/enabled models.
 		$openai_models = array();
-		if ( isset( $settings['openai_models'] ) ) {
-			// Check if it's an array.
-			if ( is_array( $settings['openai_models'] ) ) {
-				// If associative array with checkboxes (key => value pairs where value is the model name).
-				if ( ! empty( $settings['openai_models'] ) && ! isset( $settings['openai_models'][0] ) ) {
-					foreach ( $settings['openai_models'] as $model_key => $model_value ) {
-						if ( $model_value ) { // If checkbox is checked.
-							$openai_models[] = $model_key;
-						}
-					}
-				} else {
-					// Regular indexed array.
-					$openai_models = $settings['openai_models'];
-				}
-			}
+		if ( isset( $settings['openai_models'] ) && is_array( $settings['openai_models'] ) ) {
+			// Get keys from the models array (these are the enabled models).
+			$openai_models = array_keys( $settings['openai_models'] );
 		}
 
-		// Process Ollama models - stored as associative array with checkboxes.
+		// Process Ollama models - return only the checked/enabled models.
 		$ollama_models = array();
 		if ( isset( $settings['ollama_models'] ) && is_array( $settings['ollama_models'] ) ) {
-			// If associative array with checkboxes (key => value pairs where key is the model name).
-			if ( ! empty( $settings['ollama_models'] ) && ! isset( $settings['ollama_models'][0] ) ) {
-				foreach ( $settings['ollama_models'] as $model_key => $model_value ) {
-					if ( $model_value ) { // If checkbox is checked.
-						$ollama_models[] = $model_key;
-					}
-				}
-			} else {
-				// Regular indexed array (unlikely but handle it).
-				$ollama_models = $settings['ollama_models'];
-			}
+			// Get keys from the models array (these are the enabled models).
+			$ollama_models = array_keys( $settings['ollama_models'] );
 		}
 
 		// Log found models for debugging.
