@@ -283,6 +283,50 @@
                     instance.elements.renameConfirmButton = instance.elements.renameModal.querySelector('.ubc-llm-chat-rename-confirm-button');
                 }
 
+                // Find the rename form if not already set
+                if (!instance.elements.renameForm) {
+                    instance.elements.renameForm = instance.elements.renameModal.querySelector('.ubc-llm-chat-rename-form');
+                }
+
+                // Add event listener to the rename form to handle form submission
+                if (instance.elements.renameForm) {
+                    instance.elements.renameForm.addEventListener('submit', function(e) {
+                        e.preventDefault();
+
+                        // Find the rename input if not already set
+                        if (!self.elements.renameInput) {
+                            self.elements.renameInput = document.getElementById(`ubc-llm-chat-rename-input-${self.instanceId}`);
+                        }
+
+                        if (!self.elements.renameInput) {
+                            console.error('Rename input not found');
+                            ui.showNotification(
+                                'Rename functionality is not available',
+                                'error',
+                                self.elements,
+                                self.templates
+                            );
+                            return;
+                        }
+
+                        const newName = self.elements.renameInput.value.trim();
+
+                        if (newName && self.state.currentConversationId) {
+                            conversations.renameConversation(self.state.currentConversationId, newName, self);
+                            if (self.elements.renameModal) {
+                                ui.hideModal(self.elements.renameModal, self.debug);
+                            }
+                        } else {
+                            ui.showNotification(
+                                window.ubc_llm_chat_public.i18n.empty_name,
+                                'warning',
+                                self.elements,
+                                self.templates
+                            );
+                        }
+                    });
+                }
+
                 if (instance.elements.renameConfirmButton) {
                     instance.elements.renameConfirmButton.addEventListener('click', function() {
                         // Find the rename input if not already set
