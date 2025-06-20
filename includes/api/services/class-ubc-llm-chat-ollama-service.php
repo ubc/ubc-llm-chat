@@ -11,6 +11,7 @@
 namespace UBC\LLMChat\API\Services;
 
 use UBC\LLMChat\API\UBC_LLM_Chat_API_Utils;
+use UBC\LLMChat\API\UBC_LLM_Chat_API_Key_Manager;
 use UBC\LLMChat\UBC_LLM_Chat_Filters;
 use LLPhant\OllamaConfig;
 use LLPhant\Chat\OllamaChat;
@@ -19,6 +20,7 @@ use LLPhant\Chat\Enums\ChatRole;
 use LLPhant\Exception\HttpException;
 use LLPhant\Exception\MissingParameterException;
 use Psr\Http\Message\StreamInterface;
+use GuzzleHttp\Client;
 
 /**
  * Ollama Service Class
@@ -53,6 +55,14 @@ class UBC_LLM_Chat_Ollama_Service extends UBC_LLM_Chat_Service_Base {
 				$ollama_url .= '/';
 			}
 
+			// Get decrypted API key.
+			$api_key = UBC_LLM_Chat_API_Key_Manager::get_decrypted_api_key( 'ollama' );
+
+			// Check if the API key is set.
+			if ( empty( $api_key ) ) {
+				throw new \Exception( esc_html__( 'Ollama API key is not set.', 'ubc-llm-chat' ) );
+			}
+
 			// Log the full URL for debugging.
 			\UBC\LLMChat\UBC_LLM_Chat_Debug::info( 'Ollama API Full URL: ' . $ollama_url );
 
@@ -70,6 +80,22 @@ class UBC_LLM_Chat_Ollama_Service extends UBC_LLM_Chat_Service_Base {
 
 			// Initialize the Ollama chat client.
 			$chat = new OllamaChat( $config );
+
+			// Set API key in the client if available.
+			if ( ! empty( $api_key ) ) {
+				// Create a new Guzzle client with Authorization header.
+				$chat->client = new \GuzzleHttp\Client(
+					array(
+						'base_uri'        => $config->url,
+						'timeout'         => $config->timeout,
+						'connect_timeout' => $config->timeout,
+						'read_timeout'    => $config->timeout,
+						'headers'         => array(
+							'Authorization' => 'Bearer ' . $api_key,
+						),
+					)
+				);
+			}
 
 			// Set system prompt if provided.
 			if ( ! empty( $system_prompt ) ) {
@@ -157,6 +183,14 @@ class UBC_LLM_Chat_Ollama_Service extends UBC_LLM_Chat_Service_Base {
 				$ollama_url .= '/';
 			}
 
+			// Get decrypted API key.
+			$api_key = UBC_LLM_Chat_API_Key_Manager::get_decrypted_api_key( 'ollama' );
+
+			// Check if the API key is set.
+			if ( empty( $api_key ) ) {
+				throw new \Exception( esc_html__( 'Ollama API key is not set.', 'ubc-llm-chat' ) );
+			}
+
 			// Log the full URL for debugging.
 			\UBC\LLMChat\UBC_LLM_Chat_Debug::info( 'Ollama API Streaming Full URL: ' . $ollama_url );
 
@@ -174,6 +208,22 @@ class UBC_LLM_Chat_Ollama_Service extends UBC_LLM_Chat_Service_Base {
 
 			// Initialize the Ollama chat client.
 			$chat = new OllamaChat( $config );
+
+			// Set API key in the client if available.
+			if ( ! empty( $api_key ) ) {
+				// Create a new Guzzle client with Authorization header.
+				$chat->client = new \GuzzleHttp\Client(
+					array(
+						'base_uri'        => $config->url,
+						'timeout'         => $config->timeout,
+						'connect_timeout' => $config->timeout,
+						'read_timeout'    => $config->timeout,
+						'headers'         => array(
+							'Authorization' => 'Bearer ' . $api_key,
+						),
+					)
+				);
+			}
 
 			// Set system prompt if provided.
 			if ( ! empty( $system_prompt ) ) {

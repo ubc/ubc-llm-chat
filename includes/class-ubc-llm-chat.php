@@ -57,6 +57,7 @@ class UBC_LLM_Chat {
 	 * - UBC_LLM_Chat_Debug. Defines debug functionality.
 	 * - UBC_LLM_Chat_API. Defines REST API functionality.
 	 * - UBC_LLM_Chat_Usage. Defines usage functionality.
+	 * - UBC_LLM_Chat_API_Key_Manager. Defines API key management functionality.
 	 *
 	 * Create an instance of the loader which will be used to register the hooks
 	 * with WordPress.
@@ -132,6 +133,11 @@ class UBC_LLM_Chat {
 		 * The class responsible for API utilities.
 		 */
 		require_once UBC_LLM_CHAT_PATH . 'includes/api/class-ubc-llm-chat-api-utils.php';
+
+		/**
+		 * The class responsible for API key management.
+		 */
+		require_once UBC_LLM_CHAT_PATH . 'includes/api/class-ubc-llm-chat-api-key-manager.php';
 
 		/**
 		 * The class responsible for API routes registration.

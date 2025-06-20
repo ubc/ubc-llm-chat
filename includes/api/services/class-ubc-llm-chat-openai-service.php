@@ -11,6 +11,7 @@
 namespace UBC\LLMChat\API\Services;
 
 use UBC\LLMChat\API\UBC_LLM_Chat_API_Utils;
+use UBC\LLMChat\API\UBC_LLM_Chat_API_Key_Manager;
 use UBC\LLMChat\UBC_LLM_Chat_Filters;
 
 /**
@@ -34,11 +35,8 @@ class UBC_LLM_Chat_OpenAI_Service extends UBC_LLM_Chat_Service_Base {
 	 * @throws   \Exception               If there is an error with the API request.
 	 */
 	public function get_response( $conversation, $content, $model, $system_prompt, $temperature, $timeout ) {
-		// Get plugin settings.
-		$settings = get_option( 'ubc_llm_chat_settings', array() );
-
-		// Get the API key.
-		$api_key = isset( $settings['openai_api_key'] ) ? $settings['openai_api_key'] : '';
+		// Get the decrypted API key.
+		$api_key = UBC_LLM_Chat_API_Key_Manager::get_decrypted_api_key( 'openai' );
 
 		// Check if the API key is set.
 		if ( empty( $api_key ) ) {
@@ -135,11 +133,8 @@ class UBC_LLM_Chat_OpenAI_Service extends UBC_LLM_Chat_Service_Base {
 	 * @throws   \Exception               If there is an error with the API request.
 	 */
 	public function stream_response( $conversation, $content, $model, $system_prompt, $temperature, $timeout ) {
-		// Get plugin settings.
-		$settings = get_option( 'ubc_llm_chat_settings', array() );
-
-		// Get the API key.
-		$api_key = isset( $settings['openai_api_key'] ) ? $settings['openai_api_key'] : '';
+		// Get the decrypted API key.
+		$api_key = UBC_LLM_Chat_API_Key_Manager::get_decrypted_api_key( 'openai' );
 
 		// Check if the API key is set.
 		if ( empty( $api_key ) ) {

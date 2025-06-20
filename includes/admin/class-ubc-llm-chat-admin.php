@@ -9,6 +9,7 @@
 namespace UBC\LLMChat\Admin;
 
 use UBC\LLMChat\UBC_LLM_Chat_Debug;
+use UBC\LLMChat\API\UBC_LLM_Chat_API_Key_Manager;
 /**
  * The admin-specific functionality of the plugin.
  *
@@ -419,6 +420,9 @@ class UBC_LLM_Chat_Admin {
 		if ( isset( $input['openai_api_key'] ) ) {
 			if ( ! empty( $input['openai_api_key'] ) ) {
 				$sanitized_input['openai_api_key'] = $this->encrypt_api_key( sanitize_text_field( $input['openai_api_key'] ) );
+			} else {
+				// If empty string is submitted, clear the saved API key.
+				$sanitized_input['openai_api_key'] = '';
 			}
 		}
 
@@ -448,6 +452,9 @@ class UBC_LLM_Chat_Admin {
 		if ( isset( $input['ollama_api_key'] ) ) {
 			if ( ! empty( $input['ollama_api_key'] ) ) {
 				$sanitized_input['ollama_api_key'] = $this->encrypt_api_key( sanitize_text_field( $input['ollama_api_key'] ) );
+			} else {
+				// If empty string is submitted, clear the saved API key.
+				$sanitized_input['ollama_api_key'] = '';
 			}
 		}
 
@@ -504,8 +511,7 @@ class UBC_LLM_Chat_Admin {
 	 * @return   string             The encrypted API key.
 	 */
 	private function encrypt_api_key( $api_key ) {
-		$salt = wp_salt( 'auth' );
-		return base64_encode( openssl_encrypt( $api_key, 'AES-256-CBC', $salt, 0, substr( $salt, 0, 16 ) ) );
+		return UBC_LLM_Chat_API_Key_Manager::encrypt_api_key( $api_key );
 	}
 
 	/**
@@ -516,12 +522,7 @@ class UBC_LLM_Chat_Admin {
 	 * @return   string                       The decrypted API key.
 	 */
 	public function decrypt_api_key( $encrypted_api_key ) {
-		if ( empty( $encrypted_api_key ) ) {
-			return '';
-		}
-
-		$salt = wp_salt( 'auth' );
-		return openssl_decrypt( base64_decode( $encrypted_api_key ), 'AES-256-CBC', $salt, 0, substr( $salt, 0, 16 ) );
+		return UBC_LLM_Chat_API_Key_Manager::decrypt_api_key( $encrypted_api_key );
 	}
 
 	/**
@@ -836,8 +837,8 @@ class UBC_LLM_Chat_Admin {
 			// Fire action after connection test.
 			do_action( 'ubc_llm_chat_api_connection_tested', 'openai', true );
 
-			// Fire action after models are fetched.
-			do_action( 'ubc_llm_chat_models_fetched', 'openai', $models );
+			// Skip firing the models_fetched action when just testing connection.
+			// This prevents the settings from being updated unnecessarily.
 
 			wp_send_json_success();
 		} catch ( \Exception $e ) {
@@ -877,6 +878,10 @@ class UBC_LLM_Chat_Admin {
 		// Get API key from settings.
 		$settings = get_option( 'ubc_llm_chat_settings' );
 		$api_key  = isset( $settings['ollama_api_key'] ) ? $this->decrypt_api_key( $settings['ollama_api_key'] ) : '';
+
+		if ( empty( $api_key ) ) {
+			wp_send_json_error( __( 'API key is required.', 'ubc-llm-chat' ) );
+		}
 
 		try {
 			// Ensure URL ends with a trailing slash.
@@ -923,8 +928,8 @@ class UBC_LLM_Chat_Admin {
 			// Fire action after connection test.
 			do_action( 'ubc_llm_chat_api_connection_tested', 'ollama', true );
 
-			// Fire action after models are fetched.
-			do_action( 'ubc_llm_chat_models_fetched', 'ollama', $models );
+			// Skip firing the models_fetched action when just testing connection.
+			// This prevents the settings from being updated unnecessarily.
 
 			wp_send_json_success();
 		} catch ( \Exception $e ) {
@@ -1011,6 +1016,10 @@ class UBC_LLM_Chat_Admin {
 			// Get API key from settings.
 			$settings = get_option( 'ubc_llm_chat_settings' );
 			$api_key  = isset( $settings['ollama_api_key'] ) ? $this->decrypt_api_key( $settings['ollama_api_key'] ) : '';
+
+			if ( empty( $api_key ) ) {
+				wp_send_json_error( __( 'API key is required.', 'ubc-llm-chat' ) );
+			}
 
 			// Ensure URL ends with a trailing slash.
 			$url = trailingslashit( $url );
@@ -1138,7 +1147,8 @@ class UBC_LLM_Chat_Admin {
 			$settings['ollama_available_models'] = $all_models;
 		}
 
-		// Update the settings.
+		// Update the settings without touching API keys.
+		// This should be called only from fetch_models methods, not from test_connection methods.
 		update_option( 'ubc_llm_chat_settings', $settings );
 	}
 }
